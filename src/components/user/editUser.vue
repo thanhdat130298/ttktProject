@@ -1,149 +1,100 @@
 <template>
-  <div>
-    <form>
+  <v-app id="inspire">
+    <v-form>
       <h1>EDIT USER</h1>
-      <div class="leftside">
-        <div class="group">
-          <div class="left">
-            Tên đăng nhập:
-          </div>
-          <input type="text" v-model="user.login" class="right" />
-        </div>
+      <v-row>
+        <v-col class="mx-10">
+          <v-text-field
+            type="text"
+            label="Tên đăng nhập"
+            v-model="user.login"
+          />
 
-        <div class="group">
-          <div class="left">
-            Email:
-          </div>
-          <input type="email" v-model="user.email" />
-        </div>
-        <div class="group">
-          <div class="left">
-            Điện thoại di động:
-          </div>
-          <input type="number" v-model="user.phoneNumber" />
-        </div>
-        <div class="group">
-          <div class="left">
-            Ảnh:
-          </div>
-          <input type="text" v-model="user.imageUrl" />
-        </div>
-        <div class="group">
-          <div class="left">
-            Họ và Tên:
-          </div>
-          <input type="text" v-model="user.tenHienThi" />
-        </div>
-        <div class="group">
-          <div class="left space">Giới tính:</div>
-          <div>
-            <input
-              type="radio"
-              v-model="user.gioiTinh"
-              checked
-              value="true"
-            />Nam
+          <v-text-field type="email" label="Email" v-model="user.email" />
 
-            <input type="radio" v-model="user.gioiTinh" value="false" />Nữ
-          </div>
-        </div>
-      </div>
-      <!-- 
+          <v-text-field
+            type="number"
+            label="Điện thoại di động"
+            v-model="user.phoneNumber"
+          />
+
+          <v-text-field type="text" label="Ảnh" v-model="user.imageUrl" />
+          <v-text-field
+            type="text"
+            label="Họ và Tên"
+            v-model="user.tenHienThi"
+          />
+
+          <v-radio-group label="Giới tính" v-model="user.gioiTinh">
+            <v-row>
+              <v-col><v-radio label="Nam" :value="true">Nam</v-radio></v-col>
+              <v-col
+                ><v-radio label="Nu" :value="false">Nu</v-radio></v-col
+              ></v-row
+            >
+          </v-radio-group>
+        </v-col>
+        <!-- 
       /////////////////////////////// -->
-      <div class="rightside">
-        <div class="group">
-          <div class="left">
-            Nhóm quyền:
-          </div>
-          <select name="chucdanh" v-model="user.groupUserId">
-            <option value="null">--Choose--</option>
-            <option
-              v-for="nQuyen in NQ"
-              v-bind:key="nQuyen.id"
-              v-bind:value="nQuyen.id"
-            >
-              {{ nQuyen.name }}{{ nQuyen.id }}
-            </option>
-          </select>
-        </div>
-        <div class="group">
-          <div class="left">
-            Phòng Ban:
-          </div>
-          <select name="phongban" v-model="user.dmPhongBanId">
-            <option value="null">--Choose--</option>
-            <option
-              v-for="pBan in PB"
-              v-bind:key="pBan.id"
-              v-bind:value="pBan.id"
-            >
-              {{ pBan.tenPhongBan }} {{ pBan.id }}
-            </option>
-          </select>
-        </div>
-        <div class="group">
-          <div class="left">
-            Cơ quan tổ chức:
-          </div>
-          <select name="coquantochuc" v-model="user.donViId">
-            <option value="null">--Choose--</option>
-            <option
-              v-for="cQuan in CQ"
-              v-bind:key="cQuan.id"
-              v-bind:value="cQuan.id"
-            >
-              {{ cQuan.tenDonVi }}{{ cQuan.id }}
-            </option>
-          </select>
-        </div>
-        <div class="group">
-          <div class="left">
-            Đơn vị nghiệp vụ:
-          </div>
-          <select name="donvi" v-model="user.dviNghiepVuId">
-            <option value="null">--Choose--</option>
-            <option v-for="dvi in DV" v-bind:key="dvi.id" v-bind:value="dvi.id">
-              {{ dvi.tenNghiepVu }} {{ dvi.id }}
-            </option>
-          </select>
-        </div>
-        <div class="group">
-          <div class="left">
-            Chức danh:
-          </div>
-          <select name="chucdanh" v-model="user.chucDanhId">
-            <option value="null">--Choose--</option>
-            <option
-              v-for="cDanh in CD.content"
-              v-bind:key="cDanh.id"
-              v-bind:value="cDanh.id"
-            >
-              {{ cDanh.chucDanh }}{{ cDanh.id }}
-            </option>
-          </select>
-        </div>
+        <v-col class="mx-10">
+          <v-select
+            label="Nhóm quyền"
+            :items="NQ"
+            item-value="id"
+            v-model="user.groupUserId"
+            item-text="name"
+          ></v-select>
+          <v-select
+            label="Phòng Ban"
+            :items="PB"
+            item-value="id"
+            v-model="user.dmPhongBanId"
+            item-text="tenPhongBan"
+          ></v-select>
 
-        <div class="group">
-          <div class="left space">Trạng thái hoạt động:</div>
-          <div>
-            <input
-              type="radio"
-              v-model="user.activated"
-              checked
-              value="true"
-            />Thường xuyên
+          <v-select
+            label="Cơ quan tổ chức"
+            :items="CQ"
+            item-value="id"
+            v-model="user.donViId"
+            item-text="tenDonVi"
+          ></v-select>
 
-            <input type="radio" v-model="user.activated" value="false" />Không
-            hoạt động
-          </div>
-        </div>
-      </div>
+          <v-select
+            label="Đơn vị nghiệp vụ"
+            :items="DV"
+            item-value="id"
+            v-model="user.dviNghiepVuId"
+            item-text="tenNghiepVu"
+          ></v-select>
 
-      <button v-on:click.prevent="edit">EDIT</button>
-    </form>
-  </div>
+          <v-select
+            label="Chức danh"
+            :items="CD.content"
+            item-value="id"
+            v-model="user.chucDanhId"
+            item-text="chucDanh"
+          ></v-select>
+
+          <v-radio-group label="Trạng thái hoạt động" v-model="user.activated">
+            <v-row>
+              <v-col
+                ><v-radio label="Hoat Dong" :value="true"></v-radio></v-col
+              >
+              <v-col
+                ><v-radio label="Khong hoat dong" :value="false"
+                  ></v-radio
+                ></v-col
+              ></v-row
+            >
+          </v-radio-group>
+        </v-col>
+      </v-row>
+      <v-btn v-on:click.prevent="edit" color="primary">EDIT</v-btn>
+    </v-form>
+  </v-app>
 </template>
-<script>
+<script lang="ts">
 export default {
   name: "editUser",
   props: ["id"],
@@ -154,11 +105,11 @@ export default {
         id: null,
         login: null,
         email: null,
-        activated: true, //
+        activated: null, 
         chucDanhId: null,
         dmPhongBanId: null,
         dviNghiepVuId: null,
-        gioiTinh: true,
+        gioiTinh: null,
         dmTinhHuyenId: null,
         donViId: null,
         imageUrl: null,
@@ -167,24 +118,20 @@ export default {
         authoryties: [],
         groupUserId: null,
         newPermission: [],
-        removedPermission: []
-      }
+        removedPermission: [],
+      },
     };
   },
   mounted() {
     var item = this.$store.getters.users;
-
-    this.user = item.find(res => {
-    
+    this.user = item.find((res) => {
       return this.id == res.id;
-
     });
-    console.log(this.user,1111111);
-    
-    
   },
   methods: {
     edit() {
+      this.editUser.activated = this.user.activated;
+      this.editUser.gioiTinh = this.user.gioiTinh;
       this.editUser.id = this.id;
       this.editUser.login = this.user.login;
       this.editUser.email = this.user.email;
@@ -206,7 +153,7 @@ export default {
         .catch(() => {
           console.log("false");
         });
-    }
+    },
   },
   computed: {
     NQ() {
@@ -223,7 +170,7 @@ export default {
     },
     CQ() {
       return this.$store.getters.CQ;
-    }
+    },
   },
   async created() {
     await this.$store.dispatch("getNQ");
@@ -231,66 +178,11 @@ export default {
     await this.$store.dispatch("getDV");
     await this.$store.dispatch("getCQ");
     await this.$store.dispatch("getCD");
-  }
+  },
 };
 </script>
 <style scoped>
-div {
-  width: 80%;
-  margin: 0 auto;
-}
-.check {
-  color: red;
-}
-.leftside {
-  float: left;
-  width: 45%;
-  height: 500px;
-}
-.rightside {
-  margin-left: 10%;
-  float: left;
-  width: 45%;
-  height: 500px;
-}
-form {
-  width: 80%;
-  padding: 25px;
-  margin-top: 20px;
-  margin: 0 auto;
-}
-input[type="text"],
-input[type="number"],
-input[type="password"],
-input[type="email"],
-select {
-  width: 100%;
-  padding: 12px 20px;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-option {
-  width: 100%;
-  padding: 12px 20px;
-}
-.left {
-  margin-bottom: 5px;
-  margin-top: 5px;
-  text-align: left;
-}
-button {
-  width: 70%;
-  background-color: #4caf50;
-  color: white;
-  padding: 14px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #45a049;
+#inspire {
+  background-color: #fff;
 }
 </style>

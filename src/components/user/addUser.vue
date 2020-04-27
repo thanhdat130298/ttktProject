@@ -1,150 +1,135 @@
 <template>
-  <div>
-    <form>
-      <h1>ADD USER</h1>
-      <div class="leftside">
-        <div class="group">
-          <div class="left">
-            Tên đăng nhập:(<span class="check">*{{ errLogin }}</span
-            >)
+  <v-app id="inspire">
+    <v-form>
+      <h2>ADD USER</h2>
+      <v-row>
+        <v-col class="mx-10">
+          <div class="group">
+            <v-text-field
+              type="text"
+              label="Login"
+              v-model="infor.login"
+              class="right"
+            />
           </div>
-          <input type="text" v-model="infor.login" class="right" />
-        </div>
-        <div class="group">
-          <div class="left">Mật khẩu:(<span class="check">*{{ errPass }}</span>)</div>
-          <input type="password" v-model="infor.password" />
-        </div>
-        <div class="group">
-          <div class="left">
-            Nhập lại mật khẩu:(<span class="check">*{{ errRepass }}</span>)
+          <div class="group">
+            <v-text-field
+              type="password"
+              label="Password"
+              v-model="infor.password"
+            />
           </div>
-          <input type="password" v-model="repassword" />
-        </div>
-        <div class="group">
-          <div class="left">Email:(<span class="check">*{{ errEmail }}</span>)</div>
-          <input type="email" v-model="infor.email" />
-        </div>
-        <div class="group">
-          <div class="left">
-            Điện thoại di động:(<span class="check">*{{ errPhone }}</span>)
+          <div class="group">
+            <v-text-field
+              type="password"
+              label="Re-Password"
+              v-model="repassword"
+            />
           </div>
-          <input type="number" v-model="infor.phoneNumber" />
-        </div>
-        <div class="group">
-          <div class="left">Ảnh:(<span class="check">*{{ errImage }}</span>)</div>
-          <input type="text" v-model="infor.imageUrl" />
-        </div>
-        <div class="group">
-          <div class="left space">Giới tính:</div>
-          <div>
-            <input
-              type="radio"
-              v-model="infor.gioiTinh"
-              checked
-              value="true"
-            />Nam
-
-            <input
-              type="radio"
-              v-model="infor.gioiTinh"
-              name="gender"
-              value="false"
-            />Nữ
+          <div class="group">
+            <v-text-field type="email" label="Email" v-model="infor.email" />
           </div>
-        </div>
-      </div>
-      <!-- 
+          <div class="group">
+            <v-text-field
+              type="number"
+              label="Phone Number"
+              v-model="infor.phoneNumber"
+            />
+          </div>
+          <div class="group">
+            <v-text-field type="text" label="Image" v-model="infor.imageUrl" />
+          </div>
+          <div class="group">
+            <div class="left space">Gioi tinh:</div>
+            <v-radio-group v-model="infor.gioiTinh">
+              <v-row>
+                <v-col><v-radio label="Nam" value="true"></v-radio></v-col>
+                <v-col><v-radio label="Nữ" value="false"></v-radio></v-col
+              ></v-row>
+            </v-radio-group>
+          </div>
+        </v-col>
+        <!-- 
       /////////////////////////////// -->
-      <div class="rightside">
-        <div class="group">
-          <div class="left">Họ và Tên:(<span class="check">*{{ errName }}</span>)</div>
-          <input type="text" v-model="infor.tenHienThi" />
-        </div>
-        <div class="group">
-          <div class="left">Nhóm quyền:(<span class="check">*{{errNQ}}</span>)</div>
-          <select name="chucdanh" v-model="infor.groupUserId">
-            <option value="null">--Choose--</option>
-            <option
-              v-for="nQuyen in NQ"
-              v-bind:key="nQuyen.id"
-              v-bind:value="nQuyen.id"
-            >
-              {{ nQuyen.name }}{{ nQuyen.id }}
-            </option>
-          </select>
-        </div>
-        <div class="group">
-          <div class="left">Phòng Ban:(<span class="check">*({{errPB}}</span>)</div>
-          <select name="phongban" v-model="infor.dmPhongBanId">
-            <option value="null">--Choose--</option>
-            <option
-              v-for="pBan in PB"
-              v-bind:key="pBan.id"
-              v-bind:value="pBan.id"
-            >
-              {{ pBan.tenPhongBan }} {{ pBan.id }}
-            </option>
-          </select>
-        </div>
-        <div class="group">
-          <div class="left">Cơ quan tổ chức:(<span class="check">*{{errCQ}}</span>)</div>
-          <select name="coquantochuc" v-model="infor.donViId">
-            <option value="null">--Choose--</option>
-            <option
-              v-for="cQuan in CQ"
-              v-bind:key="cQuan.id"
-              v-bind:value="cQuan.id"
-            >
-              {{ cQuan.tenDonVi }}{{ cQuan.id }}
-            </option>
-          </select>
-        </div>
-        <div class="group">
-          <div class="left">
-            Đơn vị nghiệp vụ:(<span class="check">*{{errDV}}</span>)
+
+        <v-col class="mx-10">
+          <div class="group">
+            <v-text-field
+              type="text"
+              label="Ten hien thi"
+              v-model="infor.tenHienThi"
+            />
           </div>
-          <select name="donvi" v-model="infor.dviNghiepVuId">
-            <option value="null">--Choose--</option>
-            <option v-for="dvi in DV" v-bind:key="dvi.id" v-bind:value="dvi.id">
-              {{ dvi.tenNghiepVu }} {{ dvi.id }}
-            </option>
-          </select>
-        </div>
-        <div class="group">
-          <div class="left">Chức danh:(<span class="check">*{{errCD}}</span>)</div>
-          <select name="chucdanh" v-model="infor.chucDanhId">
-            <option value="null">--Choose--</option>
-            <option
-              v-for="cDanh in CD.content"
-              v-bind:key="cDanh.id"
-              v-bind:value="cDanh.id"
-            >
-              {{ cDanh.chucDanh }}{{ cDanh.id }}
-            </option>
-          </select>
-        </div>
 
-        <div class="group">
-          <div class="left space">Trạng thái hoạt động:</div>
-          <div>
-            <input
-              type="radio"
-              v-model="infor.activated"
-              checked
-              value="true"
-            />Thường xuyên
-
-            <input type="radio" v-model="infor.activated" value="false" />Không
-            hoạt động
+          <div class="group">
+            <v-select
+              label="Nhom quyen"
+              :items="NQ"
+              item-value="id"
+              v-model="infor.groupUserId"
+              item-text="name"
+            ></v-select>
           </div>
-        </div>
-      </div>
+          <div class="group">
+            <v-select
+              label="Phong Ban"
+              :items="PB"
+              item-value="id"
+              v-model="infor.dmPhongBanId"
+              item-text="tenPhongBan"
+            ></v-select>
+          </div>
+          <div class="group">
+            <v-select
+              label="Co Quan To Chuc"
+              :items="CQ"
+              item-value="id"
+              v-model="infor.donViId"
+              item-text="tenDonVi"
+            ></v-select>
+          </div>
+          <div class="group">
+            <v-select
+              label="Đơn vị nghiệp vụ"
+              :items="DV"
+              item-value="id"
+              v-model="infor.dviNghiepVuId"
+              item-text="tenNghiepVu"
+            ></v-select>
+          </div>
+          <div class="group">
+            <v-select
+              label="Chức danh"
+              :items="CD.content"
+              v-model="infor.chucDanhId"
+              item-text="chucDanh"
+              item-value="id"
+            ></v-select>
+          </div>
 
-      <button v-on:click.prevent="submit">THÊM NGƯỜI DÙNG</button>
-    </form>
-  </div>
+          <div class="group">
+            <div class="left space">Trạng thái hoạt động:</div>
+            <v-radio-group v-model="infor.activated">
+              <v-row>
+                <v-col>
+                  <v-radio label="Hoat dong" value="true"></v-radio
+                ></v-col>
+                <v-col
+                  ><v-radio
+                    label="Khong hoat dong"
+                    value="false"
+                  ></v-radio></v-col
+              ></v-row>
+            </v-radio-group>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-btn v-on:click.prevent="submit">THÊM NGƯỜI DÙNG</v-btn>
+    </v-form>
+  </v-app>
 </template>
-<script>
+<script lang="ts">
 export default {
   name: "addUser",
   data() {
@@ -153,7 +138,7 @@ export default {
         login: null,
         password: null,
         email: null,
-        activated: true,//
+        activated: true, //
         //chucDanh
         chucDanhId: null,
         dmPhongBanId: null,
@@ -167,10 +152,10 @@ export default {
         imageUrl: null,
         phoneNumber: null,
         tenHienThi: null,
-        authoryties: [],//
+        authoryties: [], //
         groupUserId: null,
         newPermission: [],
-        removedPermission: []
+        removedPermission: [],
       },
       repassword: null,
       errName: null,
@@ -186,93 +171,35 @@ export default {
       errPB: null,
       errDV: null,
       ok: true,
-      checkAdd: false
+      checkAdd: false,
     };
   },
   methods: {
     submit() {
       const arrCQ = this.$store.getters.CQ;
       const arrNQ = this.$store.getters.NQ;
-      if (!this.infor.login) {
-        this.ok = false;
-        this.errLogin = "Nhập tên đăng nhập!";
-      } else this.errLogin = "";
-      if (!this.infor.tenHienThi) {
-        this.ok = false;
-        this.errName = "Nhập Họ và tên!";
-      } else this.errName = "";
-      if(!this.infor.password) {
-        this.ok = false;
-        this.errPass = "Nhập mật khẩu!";
-      } else this.errPass = "";
-      if(!this.repassword) {
-        this.ok = false;
-        this.errRepass = "Nhập lại mật khẩu!";
-      } else if (this.infor.password!=this.repassword) {
-        this.ok = false;
-        this.errRepass =  "Mật khẩu không trùng khớp!"
-      } else (this.errRepass="");
-      if(!this.infor.email) {
-        this.ok = false;
-        this.errEmail = "Nhập Email!";
-      } else this.errEmail = "";
-      if (!this.infor.phoneNumber) {
-        this.ok=false;
-        this.errPhone = "Nhập Email";
-      } else this.errPhone = "";
-      if (!this.infor.imageUrl) {
-        this.ok=false;
-        this.errImage = "Link!";
-      } else this.errImage = "";
-      if(!this.infor.groupUserId) {
-        this.ok=false;
-        this.errNQ = "Please choose!";
-      } else this.errNQ = "";
-      
-      if(!this.infor.dmPhongBanId) {
-        this.ok=false;
-        this.errPB = "Please choose!";
-      } else this.errPB = "";
-      if(!this.infor.chucDanhId) {
-        this.ok=false;
-        this.errCD = "Please choose!";
-      } else this.errCD = "";
 
-      if(!this.infor.donViId) {
-        this.ok=false;
-        this.errDV = "Please choose!";
-      } else this.errDV = "";
+      const checkIdCQ = arrCQ.find((res) => {
 
+        return this.infor.donViId == res.id; // loop to find object have id Co Quan
+      });
 
-      if(!this.infor.dviNghiepVuId) {
-        this.ok=false;
-        this.errCQ = "Please choose!";
-      } else this.errCQ = "";
+      const checkIdNQ = arrNQ.find((res) => {
+        // loop to find object have id Nhom quyen
+        return this.infor.groupUserId == res.id;
+      });
+      this.infor.authoryties.push(checkIdNQ.name);
+      this.infor.dmTinhHuyenId = checkIdCQ.tinhHuyen.id;
 
-
-
-
-      if (this.ok == true) {
-        const checkIdCQ = arrCQ.find((res) => {
-          return this.infor.donViId == res.id; // loop to find object have id Co Quan
-        });
-        const checkIdNQ = arrNQ.find((res) => {// loop to find object have id Nhom quyen 
-          return this.infor.groupUserId == res.id;
-        });
-        this.infor.authoryties.push(checkIdNQ.name);
-        this.infor.dmTinhHuyenId = checkIdCQ.tinhHuyen.id;
-
-        this.$store.dispatch("submit", this.infor).then(()=>{
+      this.$store
+        .dispatch("submit", this.infor)
+        .then(() => {
           location.reload();
         })
-        .catch(()=>{
+        .catch(() => {
           console.log("false");
-          
-        })
-        //validate
-        // this.$emit('close', this.checkAdd);// no re-render parent
-
-      }
+        });
+      this.$emit("close", this.checkAdd); // no re-render parent
     },
   },
   computed: {
@@ -304,56 +231,5 @@ export default {
 <style scoped>
 .check {
   color: red;
-}
-.leftside {
-  float: left;
-  width: 45%;
-  height: 500px;
-}
-.rightside {
-  margin-left: 10%;
-  float: left;
-  width: 45%;
-  height: 500px;
-}
-form {
-  width: 80%;
-  padding: 25px;
-  margin-top: 20px;
-  margin: 0 auto;
-}
-input[type="text"],
-input[type="number"],
-input[type="password"],
-input[type="email"],
-select {
-  width: 100%;
-  padding: 12px 20px;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-option {
-  width: 100%;
-  padding: 12px 20px;
-}
-.left {
-  margin-bottom: 5px;
-  margin-top: 5px;
-  text-align: left;
-}
-button {
-  width: 70%;
-  background-color: #4caf50;
-  color: white;
-  padding: 14px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #45a049;
 }
 </style>

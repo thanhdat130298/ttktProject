@@ -2,12 +2,14 @@ import Vue from "vue";
 import App from "./App.vue";
 import store from "./store";
 import router from "./router/router";
-import interceptor from "./interceptor";
+import interceptor from "./intercept/interceptor";
+import vuetify from "./plugins/vuetify";
 Vue.config.productionTip = false;
 
+interceptor()
 new Vue({
   store,
-  interceptor,
   router,
-  render: h => h(App)
+  vuetify,
+  render: (h) => h(App),
 }).$mount("#app");

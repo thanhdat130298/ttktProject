@@ -31,7 +31,7 @@ export default new Vuex.Store({
       state.searchResult = result;
     },
     logout(state) {
-      state.token = null;
+      state.token = "";
       router.push("/login");
     },
     SAVE(state, name) {
@@ -45,7 +45,6 @@ export default new Vuex.Store({
     },
     length(state, length) {
       state.length = length;
-      console.log(state.length, "length");
     },
     getDmbhxhId(state, id) {
       state.dmbhxhId = id;
@@ -58,9 +57,11 @@ export default new Vuex.Store({
     },
     listNhomQuyen(state, data) {
       state.NQ = data; //
+      
     },
     listChucDanh(state, data) {
       state.CD = data; //
+      
     },
     listCoQuan(state, data) {
       state.CQ = data;
@@ -79,28 +80,6 @@ export default new Vuex.Store({
       commit("logout");
     },
 
-    async getAllUser({ commit }) {
-      await axios
-        .get(
-          "http://118.69.55.188:8080/api/users?size=1000&sort=lastModifiedDate"
-        )
-        .then((res) => {
-          console.log(res.data.length);
-
-          commit("length", res.data.length);
-        });
-    },
-    getUserByPage({ commit }, page) {
-      axios
-        .get(
-          "http://118.69.55.188:8080/api/users?page=" +
-            page +
-            "&size=25&sort=lastModifiedDate"
-        )
-        .then((res) => {
-          commit("users", res.data);
-        });
-    },
     async searchAll({ commit }, data) {
       await axios
         .get(
@@ -120,11 +99,11 @@ export default new Vuex.Store({
         )
         .then((res) => {
           commit("length", res.data.content.length);
-          console.log(res.data.content);
-          
         });
     },
     async searchUser({ commit }, data) {
+      data.page = data.page - 1;
+
       await axios
         .get(
           "http://118.69.55.188:8080/api/users/search-user?dmbhxhId=" +
@@ -141,15 +120,13 @@ export default new Vuex.Store({
             data.authorityId +
             "&page=" +
             data.page +
-            "&size=25"
+            "&size=10&sort=lastModifiedDate"
         )
         .then((res) => {
           var result = "";
-          console.log(res.data);
 
           if (res.data.content.length == 0) {
             result = "No result!";
-
             commit("search", result);
           } else {
             result = "";
@@ -158,8 +135,8 @@ export default new Vuex.Store({
           commit("users", res.data.content);
         });
     },
-    async login(state, data) {
-      await axios
+    login(state, data) {
+      axios
         .post("http://118.69.55.188:8080/api/authenticate", {
           maDonVi: data.maDonVi,
           username: data.username,
@@ -170,9 +147,7 @@ export default new Vuex.Store({
           localStorage.setItem("token", res.data.id_token);
           router.push("/home");
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch(() => {});
     },
 
     //http://192.168.0.139:8080/
@@ -184,7 +159,6 @@ export default new Vuex.Store({
         )
         .then((res) => {
           this.commit("SAVE", res.data.dmbhxh.tenDonVi);
-          console.log(res.data);
 
           localStorage.setItem("dmbhxhId", res.data.dmbhxh.id);
         });

@@ -1,62 +1,85 @@
 <template>
-  <div class="login">
-    <form>
-      <h2>LOGIN</h2>
+  <v-app id="inspire">
+    <v-content class="image">
+      <v-container class="fill-height" fluid>
+        <v-row align="center" justify="center">
+          <v-col cols="12" sm="8" md="4">
+            <v-card class="elevation-12">
+              <v-toolbar color="dark" dark flat>
+                <v-toolbar-title>Login </v-toolbar-title>
+                <v-spacer />
+              </v-toolbar>
+              <v-card-text>
+                <v-form>
+                  <v-icon>mdi-account-circle</v-icon>
+                  <v-text-field
+                    label="ID"
+                    name="id"
+                    solo
+                    type="text"
+                    v-model="id"
+                    @change="onInputChange"
+                  />
+                  <v-icon>mdi-account-box</v-icon>
+                  <v-text-field
+                    label="ĐƠN VỊ"
+                    name="donvi"
+                    solo
+                    v-model="unit"
+                    type="text"
+                    disabled="disabled"
+                  />
+                  <v-icon>mdi-account</v-icon>
+                  <v-text-field
+                    label="LOGIN"
+                    solo
+                    name="login"
+                    type="text"
+                    v-model="username"
+                  />
 
-      <p class="id">
-        <label><div class="label">ID of unit:</div></label>
-        <input
-          type="text"
-          name="id"
-          class="inputid"
-          @change="onInputChange"
-          placeholder="ID..."
-          v-model="id"
-        />
-      </p>
-      <p class="unit">
-        <label for="unit"><div class="label">Unit:</div></label>
-        <input
-          type="text"
-          name="id"
-          placeholder="Unit..."
-          v-model="unit"
-          disabled
-        />
-      </p>
-      <p class="username">
-        <label for="user"><div class="user">Username:</div> </label>
-        <input
-          type="text"
-          name="user"
-          v-model="username"
-          class="input"
-          placeholder="Username..."
-        />
-      </p>
-      <p class="password">
-        <label for="pass"><div class="label">Password:</div> </label>
-        <input
-          type="password"
-          name="pass"
-          id="pass"
-          v-model="password"
-          class="input"
-          placeholder="Password..."
-        />
-      </p>
-      <div class="err">{{ err }} {{ error }}</div>
-      <div class="loader" v-if="clicked"></div>
-      <button v-on:click.prevent="login">LOGIN</button>
-    </form>
-  </div>
+                  <v-icon>mdi-lock</v-icon>
+                  <v-text-field
+                    id="password"
+                    solo
+                    label="PASSWORD"
+                    name="password"
+                    type="password"
+                    v-model="password"
+                  />
+                </v-form>
+              </v-card-text>
+              <v-progress-circular
+                class="err"
+                v-if="clicked"
+                :size="20"
+                indeterminate
+              ></v-progress-circular>
+              <div class="err">
+                {{ err }}
+              </div>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn color="primary" large v-on:click.prevent="login">Login</v-btn>
+                <v-spacer />
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
-<script>
+<script lang="ts">
 export default {
+  props: {
+    source: String,
+  },
   name: "login",
   data() {
     return {
+      drawer: null,
       clicked: false,
       err: "",
       id: "",
@@ -69,12 +92,19 @@ export default {
   },
   methods: {
     async onInputChange() {
-      await this.$store.dispatch("getUnit", this.id);
+      await this.$store
+        .dispatch("getUnit", this.id)
+        .then(() => {
+          this.err = "";
+        })
+        .catch(() => {
+          this.err = "Id is not exist!";
+        });
       this.unit = this.$store.state.name;
     },
     login() {
       let object = {
-        username: this.username,
+        username: this.username + "_" + this.id,
         password: this.password,
         maDonVi: this.id,
       };
@@ -91,100 +121,16 @@ export default {
 };
 </script>
 <style scoped>
-.loader {
-  margin: 0 auto;
-  border: 5px solid #f3f3f3;
-  border-radius: 20%;
-  border-top: 5px solid #3498db;
-  width: 10px;
-  height: 10px;
-  -webkit-animation: spin 2s linear infinite; /* Safari */
-  animation: spin 2s linear infinite;
-}
-
-/* Safari */
-@-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-button:active {
-  background-color: white;
-  color: #555555;
-  transition: 100ms;
-  font-weight: bold;
-}
 .err {
-  height: 20px;
   color: red;
-  font-weight: bold;
+  text-align: center;
+  width: 100% !important;
 }
-form {
-  background-color: rgba(190, 190, 190, 0.4);
-  margin: 0 auto;
-  width: 30%;
-  color: white;
-  border-radius: 10px;
-  border: 1px solid #fff;
-}
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-input {
-  width: 80%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  margin: 0 auto;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-button {
-  width: 30%;
-  background-color: #555555;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.login {
-  
-  background-image: url("../assets/bg.jpg"); 
-  background-size: cover;
+.image {
+  background-image: url("../assets/bg.jpg");
   background-repeat: no-repeat;
-  background-position: center;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  padding: 50px;
+  background-size: cover;
   left: 0;
-  right: 0;
+  bottom: 0;
 }
 </style>

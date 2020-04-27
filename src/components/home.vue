@@ -1,114 +1,94 @@
 <template>
-  <div>
-    <div class="menu_top"></div>
-    <div class="content">
-      <div class="menu_left">
-        <div class="left"></div>
-        <div class="vertical-menu">
-          <button v-for="tab in tabs" v-bind:key="tab.name" v-on:click="curentTab=tab">
-            {{ tab.show }}
-          </button>
-          
-          <button v-on:click="logout">LOGOUT</button>
-        </div> 
-        <!-- <div class="vertical-menu">
-          <router-link to="./homepage">HOME</router-link>
-          <router-link to="./listAllUser">LIST</router-link>
-          <button v-on:click="logout">LOGOUT</button>
-        </div>
-        <router-view></router-view> -->
-      </div>
-        <keep-alive><component class="right" v-bind:is="selected"></component></keep-alive>
-    </div>
-  </div>
+  <v-app id="inspire">
+    <v-navigation-drawer v-model="drawer" app clipped>
+      <v-list dense>
+        <v-list-item
+          text
+          class="grey lighten-4"
+          link
+          v-for="tab in tabs"
+          v-bind:key="tab.name"
+          v-on:click="curentTab = tab"
+        >
+          <v-list-item-action> <v-icon>{{tab.icon}}</v-icon> </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>{{ tab.show }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item class="grey lighten-4" link v-on:click="logout">
+          <v-list-item-action>
+            <v-icon>mdi-arrow-left</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>LOGOUT</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar app clipped-left z-index="1000">
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-toolbar-title>Application</v-toolbar-title>
+    </v-app-bar>
+
+    <v-content class="content mx-10">
+      <v-container class="fill-height" fluid>
+        <v-row align="center" justify="center">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <keep-alive
+                ><component
+                  v-bind:is="selected"
+                  v-on="on"
+                ></component
+              ></keep-alive>
+            </template>
+          </v-tooltip>
+        </v-row>
+      </v-container>
+    </v-content>
+
+    <v-footer app>
+      <span>&copy; Deate</span>
+    </v-footer>
+  </v-app>
 </template>
+
 <script>
 import listAllUser from "./listAllUser";
 import homepage from "./homepage";
 export default {
   name: "home",
+  props: {
+    source: String,
+  },
   components: {
     listAllUser,
-    homepage
+    homepage,
   },
   data() {
     return {
+      drawer: null,
       show: false,
-      curentTab: {name: "homepage"},
-      tabs: [{name: "homepage", show: "HOME"},{name: "listAllUser", show: "LIST"}]
+      curentTab: { name: "homepage" },
+      tabs: [
+        { name: "homepage", show: "HOME", icon: "mdi-home" },
+        { name: "listAllUser", show: "LIST", icon: "mdi-domain" },
+      ],
     };
   },
   computed: {
     selected() {
       return this.curentTab.name;
-    }
+    },
   },
   methods: {
     logout() {
-      this.$store.dispatch("logout");
-    }
-  }
-};
-</script>
-<style scoped>
-.menu_top {
-  width: 100%;
-  height: 75px;
-  background-color: #4caf50;
-}
-.menu_left {
-  width: 15%;
-  float: left;
-  height: 700px;
-}
-.left {
-  position: fixed;
-  width: 15%;
-  left: 0;
-  top: 0;
-  height: 1000px;
-  background-color: #4caf50;
-}
-.right {
-  margin: 1.5%;
-  float: left;
-  width: 80%;
-}
-.vertical-menu {
-  position: fixed;
-  width: 15%;
-  margin: 0 auto;
-  padding-bottom: 2%;
-}
-button,
-.button {
-  font-size: 17px;
-  border: 1px solid white;
-  width: 100%;
-  outline: none;
-  margin: 0 auto;
-}
-.button {
-  margin-top: 2px;
-  width: 98%;
-}
-button,
-.button {
-  background-color: #eee;
-  color: black;
-  display: block;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-decoration: none;
-}
 
-button:hover,
-.button:hover {
-  background-color: #ccc;
-}
-button:active,
-.button:active {
-  background-color: #4caf50;
-  color: white;
-}
+      this.$store.dispatch("logout");
+    },
+  },
+};
+</script  lang="ts">
+<style scoped>
 </style>

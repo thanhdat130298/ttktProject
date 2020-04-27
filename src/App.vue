@@ -2,21 +2,15 @@
   <div id="app">
     <router-link to="./home"></router-link>
     <router-view />
-    
   </div>
 </template>
 <script>
 export default {
-  name: "App"
+  name: "App",
 };
 </script>
 
-<style>
-body, html{
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
+<style >
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
